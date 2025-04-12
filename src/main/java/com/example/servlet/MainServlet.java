@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@WebServlet("/catalog")
+@WebServlet("/")
 public class MainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -25,17 +25,20 @@ public class MainServlet extends HttpServlet {
         }
 
         File file = new File(path);
+
         if (file.isDirectory()) {
             req.setAttribute("files", file.listFiles());
             req.setAttribute("currentPath", path);
             req.setAttribute("parentPath", file.getParent());
             req.setAttribute("currentTime", new Date());
             req.getRequestDispatcher("/mypage.jsp").forward(req, resp);
+
         } else if (file.isFile()) {
             Path filePath = Paths.get(path);
             resp.setContentType(Files.probeContentType(filePath));
             resp.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
             Files.copy(filePath, resp.getOutputStream());
+
         } else {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }

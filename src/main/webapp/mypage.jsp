@@ -8,10 +8,12 @@
 <%@ page import="java.net.URLEncoder" %>
 
 <html>
+
 <head>
     <title>Обзор директории</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
+
 <body>
 <h1>Обзор директории</h1>
 <p>Время онлайн: <%= request.getAttribute("currentTime") %></p>
@@ -20,6 +22,7 @@
     String parentPath = (String) request.getAttribute("parentPath");
     String encodedParentPath = parentPath != null ? URLEncoder.encode(parentPath, "UTF-8") : "";
 %>
+
 <table>
     <tr>
         <th>Тип</th>
@@ -27,6 +30,7 @@
         <th class="size">Размер</th>
         <th>Последние изменения</th>
     </tr>
+
     <% if (parentPath != null) { %>
     <tr>
         <td colspan="4">
@@ -34,6 +38,7 @@
         </td>
     </tr>
     <% } %>
+
     <%
         File[] files = (File[]) request.getAttribute("files");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -45,6 +50,7 @@
             String formattedCreationTime = dateFormat.format(new Date(creationTime.toMillis()));
             String size = file.isDirectory() ? "" : file.length() + " B";
     %>
+
     <tr>
         <td>
             <% if (file.isDirectory()) { %>
@@ -53,6 +59,7 @@
                 <span class="file">Файл</span>
             <% } %>
         </td>
+
         <td>
             <% if (file.isDirectory()) { %>
                 <a class="directory" href="${pageContext.request.contextPath}/catalog?path=<%= encodedPath %>">
@@ -64,6 +71,7 @@
                 </a>
             <% } %>
         </td>
+
         <td class="size"><%= size %></td>
         <td><%= formattedCreationTime %></td>
     </tr>
