@@ -1,7 +1,6 @@
 package com.example.servlet;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.*;
@@ -28,7 +27,7 @@ public class LoginServlet extends HttpServlet {
                 p.load(in);
             }
             String savedPass = p.getProperty("password");
-            ok = password != null && password.equals(savedPass); // DEMO! сравнивайте хэши
+            ok = password != null && password.equals(savedPass);
         }
 
         if (ok) {

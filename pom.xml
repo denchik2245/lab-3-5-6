@@ -9,26 +9,25 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <!-- ─── Общие свойства ─────────────────────────────────────────────── -->
+    <!--Общие свойства -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>17</maven.compiler.release>   <!-- компилируем сразу под 17 -->
+        <maven.compiler.release>17</maven.compiler.release>
     </properties>
 
-    <!-- ─── Зависимости ────────────────────────────────────────────────── -->
+    <!-- Зависимости -->
     <dependencies>
-        <!-- API помечаем provided, в WAR не кладётся -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
             <version>6.0.0</version>
             <scope>provided</scope>
         </dependency>
+
     </dependencies>
 
-    <!-- ─── Сборка ──────────────────────────────────────────────────────── -->
+    <!-- Сборка -->
     <build>
-        <!-- гарантируем красивый context‑path: /servlet -->
         <finalName>servlet</finalName>
 
         <plugins>
@@ -49,7 +48,6 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
                 <configuration>
-                    <!-- чтобы не требовал web.xml -->
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>

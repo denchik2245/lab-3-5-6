@@ -5,7 +5,7 @@
                              https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
 
-    <!-- ===== Сервлеты ================================================== -->
+    <!-- Сервлеты -->
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>com.example.servlet.LoginServlet</servlet-class>
@@ -42,7 +42,6 @@
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
 
-    <!-- файл, который открывать, если пользователь обращается к корню контекста -->
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
