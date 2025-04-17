@@ -1,81 +1,68 @@
 <%@ page import="java.io.File" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.nio.file.Files" %>
 <%@ page import="java.nio.file.attribute.BasicFileAttributes" %>
 <%@ page import="java.nio.file.attribute.FileTime" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="java.net.URLEncoder" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
-
 <head>
     <title>Обзор директории</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
-
 <body>
+
+<div style="float:right">
+    <a href="${pageContext.request.contextPath}/logout">Выйти</a>
+</div>
+
 <h1>Обзор директории</h1>
 <p>Время онлайн: <%= request.getAttribute("currentTime") %></p>
-<p>Выбранный путь: <%= request.getAttribute("currentPath") %></p>
+<p>Текущий путь: <%= request.getAttribute("currentPath") %></p>
+
 <%
     String parentPath = (String) request.getAttribute("parentPath");
-    String encodedParentPath = parentPath != null ? URLEncoder.encode(parentPath, "UTF-8") : "";
 %>
 
 <table>
-    <tr>
-        <th>Тип</th>
-        <th>Имя</th>
-        <th class="size">Размер</th>
-        <th>Последние изменения</th>
-    </tr>
+    <tr><th>Тип</th><th>Имя</th><th class="size">Размер</th><th>Изменён</th></tr>
 
     <% if (parentPath != null) { %>
     <tr>
         <td colspan="4">
-            <a href="${pageContext.request.contextPath}/catalog?path=<%= encodedParentPath %>">Вверх</a>
+            <a href="${pageContext.request.contextPath}/home?path=<%= URLEncoder.encode(parentPath, "UTF-8") %>">
+                &larr; Вверх
+            </a>
         </td>
     </tr>
     <% } %>
 
     <%
         File[] files = (File[]) request.getAttribute("files");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        for (File file : files) {
-            // Кодируем путь для каждой ссылки
-            String encodedPath = URLEncoder.encode(file.getAbsolutePath(), "UTF-8");
-            BasicFileAttributes attrs = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-            FileTime creationTime = attrs.creationTime();
-            String formattedCreationTime = dateFormat.format(new Date(creationTime.toMillis()));
-            String size = file.isDirectory() ? "" : file.length() + " B";
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        if (files != null) {
+            for (File f : files) {
+                String encoded = URLEncoder.encode(f.getAbsolutePath(), "UTF-8");
+                BasicFileAttributes a = Files.readAttributes(f.toPath(), BasicFileAttributes.class);
+                FileTime ft = a.lastModifiedTime();
     %>
-
     <tr>
+        <td><%= f.isDirectory() ? "Папка" : "Файл" %></td>
         <td>
-            <% if (file.isDirectory()) { %>
-                <span class="directory">Папка</span>
-            <% } else { %>
-                <span class="file">Файл</span>
-            <% } %>
+            <a href="${pageContext.request.contextPath}/home?path=<%= encoded %>">
+                <%= f.getName() %><%= f.isDirectory() ? "/" : "" %>
+            </a>
         </td>
-
-        <td>
-            <% if (file.isDirectory()) { %>
-                <a class="directory" href="${pageContext.request.contextPath}/catalog?path=<%= encodedPath %>">
-                    <%= file.getName() %>/
-                </a>
-            <% } else { %>
-                <a class="file" href="${pageContext.request.contextPath}/catalog?path=<%= encodedPath %>">
-                    <%= file.getName() %>
-                </a>
-            <% } %>
-        </td>
-
-        <td class="size"><%= size %></td>
-        <td><%= formattedCreationTime %></td>
+        <td class="size"><%= f.isDirectory() ? "" : f.length() + " B" %></td>
+        <td><%= df.format(new Date(ft.toMillis())) %></td>
     </tr>
-    <% } %>
+    <%
+            }
+        }
+    %>
 </table>
 </body>
 </html>
