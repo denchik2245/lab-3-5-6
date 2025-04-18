@@ -1,15 +1,12 @@
 package com.example.servlet;
 
+import com.example.servlet.DBUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
-
-import java.io.*;
-import java.nio.file.*;
-import java.util.Properties;
+import java.io.IOException;
+import java.sql.*;
 
 public class LoginServlet extends HttpServlet {
-
-    private static final Path USERS_ROOT = Paths.get("D:/Study/Student/filemanager");
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -18,16 +15,19 @@ public class LoginServlet extends HttpServlet {
         String login    = req.getParameter("login");
         String password = req.getParameter("password");
 
-        Path propsFile = USERS_ROOT.resolve(login).resolve("user.properties");
-
         boolean ok = false;
-        if (Files.exists(propsFile)) {
-            Properties p = new Properties();
-            try (InputStream in = Files.newInputStream(propsFile)) {
-                p.load(in);
+        String query = "SELECT password FROM users WHERE login = ?";
+        try (Connection c = DBUtil.getConnection();
+             PreparedStatement ps = c.prepareStatement(query)) {
+            ps.setString(1, login);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String savedPass = rs.getString("password");
+                    ok = password.equals(savedPass); // либо проверка хэша
+                }
             }
-            String savedPass = p.getProperty("password");
-            ok = password != null && password.equals(savedPass);
+        } catch (SQLException e) {
+            throw new ServletException(e);
         }
 
         if (ok) {

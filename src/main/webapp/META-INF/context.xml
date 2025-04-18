@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <Resource
+            name="jdbc/FileManagerDB"
+            auth="Container"
+            type="javax.sql.DataSource"
+            driverClassName="com.mysql.cj.jdbc.Driver"
+            url="jdbc:mysql://localhost:3306/filemanagerdb?useSSL=false&amp;serverTimezone=UTC"
+            username="fmuser"
+            password="fmsecret"
+            maxTotal="20"
+            maxIdle="10"
+    />
+</Context>
