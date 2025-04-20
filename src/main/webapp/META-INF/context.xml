@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
+
     <Resource
             name="jdbc/FileMgrDS"
             auth="Container"
@@ -11,4 +12,22 @@
             username="fm_user"
             password="S3curePass!"
     />
+
+    <Manager className="org.apache.catalina.session.PersistentManager"
+             sessionActivityCheck="true"
+             persistAuthentication="true"
+             saveOnRestart="true">
+
+        <Store className="org.apache.catalina.session.DataSourceStore"
+               dataSourceName="jdbc/FileMgrDS"
+               localDataSource="true"
+               sessionTable="tomcat_session"
+        sessionIdCol="session_id"
+        sessionDataCol="session_data"
+        sessionValidCol="is_valid"
+        sessionMaxInactiveCol="max_inactive"
+        sessionLastAccessedCol="last_access"
+        sessionAppCol="app_name"/>
+    </Manager>
+
 </Context>

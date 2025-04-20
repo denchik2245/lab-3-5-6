@@ -27,7 +27,7 @@ public class RegisterServlet extends HttpServlet {
         }
 
         String hash = BCrypt.hashpw(password, BCrypt.gensalt());
-        Path   userDir = USERS_ROOT.resolve(login);
+        Path userDir = USERS_ROOT.resolve(login);
 
         try (Connection c = Db.get()) {
 

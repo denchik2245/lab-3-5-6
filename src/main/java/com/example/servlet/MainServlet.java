@@ -24,6 +24,7 @@ public class MainServlet extends HttpServlet {
 
         String username = (String) session.getAttribute("user");
         String userHome = "D:\\Study\\Student\\filemanager\\" + username;
+
         String pathParam = req.getParameter("path");
         String targetPath;
 
@@ -60,11 +61,5 @@ public class MainServlet extends HttpServlet {
         else {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        super.doPost(req, resp);
     }
 }

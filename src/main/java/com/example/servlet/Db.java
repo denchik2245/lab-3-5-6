@@ -10,8 +10,7 @@ public final class Db {
 
     static {
         try {
-            DS = (DataSource) new InitialContext()
-                    .lookup("java:comp/env/jdbc/FileMgrDS");
+            DS = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/FileMgrDS");
         } catch (Exception e) {
             throw new ExceptionInInitializerError("Cannot init datasource: " + e);
         }
