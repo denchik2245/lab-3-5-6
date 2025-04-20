@@ -29,7 +29,9 @@ public class MainServlet extends HttpServlet {
 
         if (pathParam == null || pathParam.isEmpty()) {
             targetPath = userHome;
-        } else {
+        }
+
+        else {
             targetPath = pathParam;
         }
 
@@ -46,12 +48,16 @@ public class MainServlet extends HttpServlet {
             req.setAttribute("parentPath", file.getParent());
             req.setAttribute("currentTime", new Date());
             req.getRequestDispatcher("/mypage.jsp").forward(req, resp);
-        } else if (file.isFile()) {
+        }
+
+        else if (file.isFile()) {
             Path filePath = Paths.get(file.getAbsolutePath());
             resp.setContentType(Files.probeContentType(filePath));
             resp.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
             Files.copy(filePath, resp.getOutputStream());
-        } else {
+        }
+
+        else {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }

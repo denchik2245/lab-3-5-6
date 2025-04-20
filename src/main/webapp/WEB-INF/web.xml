@@ -5,7 +5,6 @@
                              https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
 
-    <!-- Сервлеты -->
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>com.example.servlet.LoginServlet</servlet-class>
@@ -47,10 +46,10 @@
     </welcome-file-list>
 
     <resource-ref>
-        <description>MySQL DataSource</description>
-        <res-ref-name>jdbc/FileManagerDB</res-ref-name>
+        <description>MySQL datasource</description>
+        <res-ref-name>jdbc/FileMgrDS</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
         <res-auth>Container</res-auth>
     </resource-ref>
-
+    
 </web-app>
