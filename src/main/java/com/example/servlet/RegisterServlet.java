@@ -1,12 +1,16 @@
 package com.example.servlet;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
-import java.nio.file.*;
-import java.sql.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
 
 public class RegisterServlet extends HttpServlet {
     private static final Path USERS_ROOT = Paths.get("D:/Study/Student/filemanager");
@@ -29,33 +33,17 @@ public class RegisterServlet extends HttpServlet {
         String hash = BCrypt.hashpw(password, BCrypt.gensalt());
         Path userDir = USERS_ROOT.resolve(login);
 
-        try (Connection c = Db.get()) {
-
-            try (PreparedStatement chk = c.prepareStatement(
-                    "SELECT 1 FROM users WHERE username = ?")) {
-                chk.setString(1, login);
-                if (chk.executeQuery().next()) {
-                    req.setAttribute("registerFailed", "Логин уже занят");
-                    req.getRequestDispatcher("/register.jsp").forward(req, resp);
-                    return;
-                }
-            }
-
-            Files.createDirectories(userDir);
-
-            try (PreparedStatement ins = c.prepareStatement(
-                    "INSERT INTO users(username, pass_hash, email, home_dir) " +
-                            "VALUES (?,?,?,?)")) {
-                ins.setString(1, login);
-                ins.setString(2, hash);
-                ins.setString(3, email);
-                ins.setString(4, userDir.toString());
-                ins.executeUpdate();
-            }
-
-        } catch (SQLException e) {
-            throw new ServletException(e);
+        UserDao dao = new UserDao();
+        Optional<User> existing = dao.findByUsername(login);
+        if (existing.isPresent()) {
+            req.setAttribute("registerFailed", "Логин уже занят");
+            req.getRequestDispatcher("/register.jsp").forward(req, resp);
+            return;
         }
+
+        Files.createDirectories(userDir);
+        User user = new User(login, hash, email, userDir.toString());
+        dao.save(user);
 
         req.getSession().setAttribute("user", login);
         resp.sendRedirect(req.getContextPath() + "/home");
