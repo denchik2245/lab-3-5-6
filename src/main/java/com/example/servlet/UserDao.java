@@ -5,9 +5,6 @@ import org.hibernate.Transaction;
 import java.util.Optional;
 
 public class UserDao {
-    /**
-     * Открывает новую сессию и транзакцию для каждого вызова
-     */
     public Optional<User> findByUsername(String username) {
         Session session = null;
         Transaction tx = null;

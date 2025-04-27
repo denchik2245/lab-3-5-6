@@ -2,18 +2,16 @@
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
         "http://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
 <hibernate-configuration>
     <session-factory>
-        <!-- Use the existing Tomcat DataSource -->
         <property name="hibernate.connection.datasource">java:comp/env/jdbc/FileMgrDS</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
         <property name="hibernate.current_session_context_class">thread</property>
 
-        <!-- Optional: show SQL in logs -->
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
 
-        <!-- Map your entity -->
         <mapping class="com.example.servlet.User"/>
     </session-factory>
 </hibernate-configuration>
